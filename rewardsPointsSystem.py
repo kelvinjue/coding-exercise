@@ -63,12 +63,12 @@ class RewardsSystem:
           total_spent += item.itemId * item.item_price
 
           # Update items sold
-          for purchase in items_purchased:
-            self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
+        for purchase in items_purchased:
+          self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
 
-          items_purchased = len(items_purchased) == 0
-          if items_purchased:
-            raise ValueError('Items purchased were not recorded.')
+        items_purchased = len(items_purchased) == 0
+        if items_purchased:
+          raise ValueError('Items purchased were not recorded.')
 
       else:
 
