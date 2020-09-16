@@ -61,13 +61,13 @@ class RewardsSystem:
       if not reward_points_used:
         reward_points_used = 0
 
-          # Update items sold
-        for purchase in items_purchased:
-          self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
+      if not items_purchased:
+        self.error_log.append(log_entry)
+        return
 
-        items_purchased = len(items_purchased) == 0
-        if items_purchased:
-          raise ValueError('Items purchased were not recorded.')
+      if customer_id:
+        # Update amount spent
+        total_spent = sum(map(lambda i: i.item_price, items_purchased))
 
         if customer_id not in amount_spent:
           amount_spent[customer_id] = 0
