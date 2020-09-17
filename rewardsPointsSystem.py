@@ -82,8 +82,8 @@ class RewardsSystem:
         amount_spent[customer_id] += total_spent
 
       # Update items sold
-      for purchase in items_purchased:
-        self.items_purchased[purchase.id] += purchase.price
+      for item in items_purchased:
+        self.items_purchased[item.id] += item.price
 
     # At end of day, award reward points back to customers based on how much they spent
     for customer_id in amount_spent:
