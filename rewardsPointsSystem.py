@@ -39,6 +39,12 @@ class Item:
     self.id = id
     self.price = price
 
+class LogEntry:
+  def __init__(self, id, reward_points_used, items_purchased):
+    self.id = id
+    self.reward_points_used = reward_points_used
+    self.items_purchased = items_purchased
+
 class RewardsSystem:
   REWARDS_RATIO_BELOW = 18
   REWARDS_CUTOFF = 250
@@ -51,9 +57,9 @@ class RewardsSystem:
     amount_spent = defaultdict(int)
 
     for log_entry in log:
-      customer_id = log_entry[0]
-      reward_points_used = log_entry[1]
-      items_purchased = log_entry[2]
+      customer_id = log.customer_id
+      reward_points_used = log.reward_points_used
+      items_purchased = log.items_purchased
 
       if not customer_id:
         total_spent = 0
