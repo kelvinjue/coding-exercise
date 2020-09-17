@@ -97,5 +97,10 @@ class RewardsSystem:
       # Update customer rewards points
       self.rewards_points[customer_id] += rewards_points
 
-  def get_items_purchased(self, item_id):
+  # Returns total quantity of an item purchased
+  def get_purchased_items_count(self, item_id):
     return self.items_purchased[item_id]
+
+  # Gets the reward points for a specified customer
+  def get_rewards_points(self, customer_id):
+    return self.rewards_points[customer_id]
