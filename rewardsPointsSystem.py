@@ -1,6 +1,5 @@
 """
-
-PROBLEM: Management needs to know how many of each item they are selling each 
+PROBLEM: Management needs to know how many of each item they are selling each
 day and what each customer’s current reward points balance is.
 
 Design a system that parses the log file and:
@@ -31,7 +30,6 @@ Example- this is written in casual terms, and must be modified to actual data st
 		- Customer 1 purchased 2 bananas and 1 apple; he used 100 rewards points
 		- Customer 2 purchased 1 banana and 1 apple; she used 0 rewards points
 		- Customer 1 purchased 1 banana; he used 0 rewards points
-
 """
 
 class Item:
@@ -39,7 +37,7 @@ class Item:
     self.itemId = itemId
     self.item_price = item_price
 
-from collections import defaultdict    
+from collections import defaultdict
 
 class RewardsSystem:
   REWARDS_RATIO_BELOW = 18
@@ -92,7 +90,7 @@ class RewardsSystem:
       # Calculate rewards points received
       rewards_points = amount_spent[customer_id] // RewardsSystem.REWARDS_RATIO_BELOW
       if amount_spent > RewardsSystem.REWARDS_CUTOFF:
-        rewards_points =  amount_spent[customer_id] // 17 
+        rewards_points =  amount_spent[customer_id] // 17
 
       # Update customer rewards points
       self.rewards_points[customer_id] += rewards_points
