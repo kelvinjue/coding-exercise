@@ -1,6 +1,5 @@
 """
-
-PROBLEM: Management needs to know how many of each item they are selling each 
+PROBLEM: Management needs to know how many of each item they are selling each
 day and what each customer’s current reward points balance is.
 
 Design a system that parses the log file and:
@@ -23,79 +22,85 @@ If this is the case, please address them in the following ways:
 - If there is no rewards points specified, assume rewards points = 0
 - If there is no list of items purchased, then this is an error in the system. Please add this LogEntry to a error log (a list of LogEntry called 'error')
 
-Example- this is written in casual terms, and must be modified to actual data structures
+Example - this is written in casual terms, and must be modified to actual data structures
 	Items:
-		- Banana- $50
-		- Apple- $100
+		- Banana - $50
+		- Apple - $100
 	Log Entries:
 		- Customer 1 purchased 2 bananas and 1 apple; he used 100 rewards points
 		- Customer 2 purchased 1 banana and 1 apple; she used 0 rewards points
 		- Customer 1 purchased 1 banana; he used 0 rewards points
-
 """
 
-class Item:
-  def __init__(self, itemId, item_price):
-    self.itemId = itemId
-    self.item_price = item_price
+from collections import defaultdict
 
-from collections import defaultdict    
+class Item:
+  def __init__(self, id, price):
+    self.id = id
+    self.price = price
+
+class LogEntry:
+  def __init__(self, customer_id, reward_points_used, items_purchased):
+    self.customer_id = customer_id
+    self.reward_points_used = reward_points_used
+    self.items_purchased = items_purchased
 
 class RewardsSystem:
   REWARDS_RATIO_BELOW = 18
+  REWARDS_RATIO_ABOVE = 17
   REWARDS_CUTOFF = 250
 
   def __init__(self):
     self.rewards_points = defaultdict(int)
     self.items_purchased = defaultdict(int)
+    self.error_logs = []
 
-  def process_log(self, log):
+  def process_logs(self, logs):
     amount_spent = defaultdict(int)
 
-    for log_entry in log:
-      customer_id = log_entry[0]
-      reward_points_used = log_entry[1]
-      items_purchased = log_entry[2]
+    for log_entry in logs:
+      customer_id = log_entry.customer_id
+      reward_points_used = log_entry.reward_points_used
+      items_purchased = log_entry.items_purchased
 
-      if not customer_id:
-        total_spent = 0
-        for item in items_purchased:
-          total_spent += item.itemId * item.item_price
+      if not reward_points_used:
+        reward_points_used = 0
 
-          # Update items sold
-        for purchase in items_purchased:
-          self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
+      if not items_purchased:
+        self.error_logs.append(log_entry)
+        continue
 
-        items_purchased = len(items_purchased) == 0
-        if items_purchased:
-          raise ValueError('Items purchased were not recorded.')
-
-      else:
+      if customer_id:
 
         # Subtract rewards points used from customer
         self.rewards_points[customer_id] -= reward_points_used
 
         total_spent = 0
         for item in items_purchased:
-          total_spent += item.itemId * item.item_price
+          total_spent += item.price
 
-        amount_spent[customer_id] = amount_spent.get(customer_id, 0) + total_spent
+        amount_spent[customer_id] += total_spent
 
-        # Update items sold
-        for purchase in items_purchased:
-          self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
-
-        print(self.reward_points)
+      # Update items sold
+      for item in items_purchased:
+        self.items_purchased[item.id] += item.price
 
     # At end of day, award reward points back to customers based on how much they spent
     for customer_id in amount_spent:
+
       # Calculate rewards points received
-      rewards_points = amount_spent[customer_id] // RewardsSystem.REWARDS_RATIO_BELOW
       if amount_spent > RewardsSystem.REWARDS_CUTOFF:
-        rewards_points =  amount_spent[customer_id] // 17 
+        rewards_points = amount_spent[customer_id] // RewardsSystem.REWARDS_RATIO_ABOVE
+      else:
+        rewards_points = amount_spent[customer_id] // RewardsSystem.REWARDS_RATIO_BELOW
 
       # Update customer rewards points
       self.rewards_points[customer_id] += rewards_points
 
-  def get_items_purchased(self, item_id):
+  # Returns total quantity of an item purchased
+  def get_purchased_items_count(self, item_id):
     return self.items_purchased[item_id]
+
+  # Gets the reward points for a specified customer
+  def get_rewards_points(self, customer_id):
+    return self.rewards_points[customer_id]
