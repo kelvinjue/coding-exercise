@@ -22,7 +22,7 @@ If this is the case, please address them in the following ways:
 - If there is no rewards points specified, assume rewards points = 0
 - If there is no list of items purchased, then this is an error in the system. Please add this LogEntry to a error log (a list of LogEntry called 'error')
 
-Example- this is written in casual terms, and must be modified to actual data structures
+Example - this is written in casual terms, and must be modified to actual data structures
 	Items:
 		- Banana- $50
 		- Apple- $100
@@ -32,12 +32,12 @@ Example- this is written in casual terms, and must be modified to actual data st
 		- Customer 1 purchased 1 banana; he used 0 rewards points
 """
 
-class Item:
-  def __init__(self, itemId, item_price):
-    self.itemId = itemId
-    self.item_price = item_price
-
 from collections import defaultdict
+
+class Item:
+  def __init__(self, id, price):
+    self.id = id
+    self.price = price
 
 class RewardsSystem:
   REWARDS_RATIO_BELOW = 18
@@ -58,11 +58,11 @@ class RewardsSystem:
       if not customer_id:
         total_spent = 0
         for item in items_purchased:
-          total_spent += item.itemId * item.item_price
+          total_spent += item.id * item.price
 
           # Update items sold
         for purchase in items_purchased:
-          self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
+          self.items_purchased[purchase.id] = self.items_purchased.get(purchase.id, 0) + purchase.price
 
         items_purchased = len(items_purchased) == 0
         if items_purchased:
@@ -75,13 +75,13 @@ class RewardsSystem:
 
         total_spent = 0
         for item in items_purchased:
-          total_spent += item.itemId * item.item_price
+          total_spent += item.id * item.price
 
         amount_spent[customer_id] = amount_spent.get(customer_id, 0) + total_spent
 
         # Update items sold
         for purchase in items_purchased:
-          self.items_purchased[purchase.itemId] = self.items_purchased.get(purchase.itemId, 0) + purchase.item_price
+          self.items_purchased[purchase.id] = self.items_purchased.get(purchase.id, 0) + purchase.price
 
         print(self.reward_points)
 
