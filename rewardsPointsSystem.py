@@ -24,8 +24,8 @@ If this is the case, please address them in the following ways:
 
 Example - this is written in casual terms, and must be modified to actual data structures
 	Items:
-		- Banana- $50
-		- Apple- $100
+		- Banana - $50
+		- Apple - $100
 	Log Entries:
 		- Customer 1 purchased 2 bananas and 1 apple; he used 100 rewards points
 		- Customer 2 purchased 1 banana and 1 apple; she used 0 rewards points
@@ -47,11 +47,13 @@ class LogEntry:
 
 class RewardsSystem:
   REWARDS_RATIO_BELOW = 18
+  REWARDS_RATIO_ABOVE = 17
   REWARDS_CUTOFF = 250
 
   def __init__(self):
     self.rewards_points = defaultdict(int)
     self.items_purchased = defaultdict(int)
+    self.error_logs = []
 
   def process_logs(self, logs):
     amount_spent = defaultdict(int)
@@ -64,7 +66,7 @@ class RewardsSystem:
       if not customer_id:
         total_spent = 0
         for item in items_purchased:
-          total_spent += item.id * item.price
+          total_spent += item.price
 
           # Update items sold
         for purchase in items_purchased:
@@ -96,7 +98,7 @@ class RewardsSystem:
       # Calculate rewards points received
       rewards_points = amount_spent[customer_id] // RewardsSystem.REWARDS_RATIO_BELOW
       if amount_spent > RewardsSystem.REWARDS_CUTOFF:
-        rewards_points =  amount_spent[customer_id] // 17
+        rewards_points = amount_spent[customer_id] // RewardsSystem.REWARDS_RATIO_ABOVE
 
       # Update customer rewards points
       self.rewards_points[customer_id] += rewards_points
