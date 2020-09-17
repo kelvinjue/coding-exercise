@@ -53,13 +53,13 @@ class RewardsSystem:
     self.rewards_points = defaultdict(int)
     self.items_purchased = defaultdict(int)
 
-  def process_log(self, log):
+  def process_logs(self, logs):
     amount_spent = defaultdict(int)
 
-    for log_entry in log:
-      customer_id = log.customer_id
-      reward_points_used = log.reward_points_used
-      items_purchased = log.items_purchased
+    for log_entry in logs:
+      customer_id = log_entry.customer_id
+      reward_points_used = log_entry.reward_points_used
+      items_purchased = log_entry.items_purchased
 
       if not customer_id:
         total_spent = 0
