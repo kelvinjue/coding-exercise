@@ -33,13 +33,12 @@ Example- this is written in casual terms, and must be modified to actual data st
 		- Customer 1 purchased 1 banana; he used 0 rewards points
 
 """
+from collections import defaultdict
 
 class Item:
-  def __init__(self, itemId, item_price):
-    self.itemId = itemId
-    self.item_price = item_price
-
-from collections import defaultdict    
+  def __init__(self, item_id, item_price):
+    self.item_id = item_id
+    self.item_price = item_price    
 
 class RewardsSystem:
   REWARDS_RATIO_BELOW = 18
